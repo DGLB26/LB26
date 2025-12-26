@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin - Lakshmir Bhandar Data</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+    body{
+      font-family:'Poppins',sans-serif;
+      background:linear-gradient(135deg,#00ffcc,#0066ff);
+      min-height:100vh;
+      display:flex;flex-direction:column;align-items:center;padding:20px;color:#fff;
+      overflow-x: auto; /* Allows horizontal scrolling for wide table */
+    }
+    h1{margin-top:20px;}
+    .panel{
+      width:100%; max-width:1400px; background:rgba(255,255,255,0.1);
+      backdrop-filter:blur(10px);padding:20px;border-radius:20px;margin-top:20px;
+      box-shadow:0 5px 20px rgba(0,0,0,0.3);
+    }
+    table{min-width: 800px; width:100%;border-collapse:collapse;margin-top:10px;background:rgba(255,255,255,0.9);color:#000;}
+    th,td{border:1px solid #ccc;padding:8px;text-align:left; white-space: nowrap; font-size: 13px;}
+    th{background:#0072ff;color:#fff; cursor: pointer;}
+    th:hover {background: #005bb5;}
+    button{background:#ff6a00;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer; margin: 2px 5px;}
+    button:hover{transform:scale(1.05);}
+    #loginBox{margin-top:50px;text-align:center; padding: 20px; border-radius: 10px; background: rgba(0,0,0,0.2);}
+    input{padding:10px;border-radius:8px;border:none;}
+    #statusMessage {margin-top: 15px; font-weight: 600; color: #ff0;}
+    
+    /* Modal Styles */
+    .modal {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.7); display: none;
+        align-items: center; justify-content: center; z-index: 1000;
+        backdrop-filter: blur(5px);
+    }
+    .modal.active {display: flex;}
+    .modal-content {
+        background: #b6f9ff; border-radius: 15px; padding: 30px;
+        width: 95%; max-width: 800px; /* Increased max width */
+        max-height: 90vh; overflow-y: auto;
+        color: #333; position: relative;
+    }
+    .close {
+        position: absolute; top: 15px; right: 25px; font-size: 30px; 
+        color: #FF6F91; cursor: pointer; font-weight: 300; transition: transform 0.2s;
+    }
+    .modal-content h3 {margin-top: 0; color: #01aaff;}
+    
+    /* New styles for two-column modal */
+    .modal-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr; /* Details on left, Photo on right */
+        gap: 20px;
+    }
+    .details-section p {
+        margin: 5px 0; border-bottom: 1px dotted #eee; padding-bottom: 5px;
+    }
+    .details-section p strong, .details-section label strong {
+        min-width: 150px; display: inline-block; color: #d800e4; font-weight: 600;
+    }
+    .photo-section {
+        text-align: center;
+    }
+    .applicant-photo {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        margin-top: 10px;
+    }
+    .modal-footer {
+        text-align: right;
+        border-top: 1px solid #eee;
+        padding-top: 15px;
+        margin-top: 15px;
+    }
+    .modal-footer button {
+        background: #FF6F91; /* Highlight edit button */
+        margin-left: 10px;
+    }
+    .modal-footer button:hover {
+        background: #d45172;
+    }
+    .details-section label {
+        display: block; margin-top: 10px;
+    }
+    .editable-input {
+        width: 100%;
+        padding: 6px;
+        margin-top: 2px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+    @media (max-width: 700px) {
+        .modal-grid {
+            grid-template-columns: 1fr;
+        }
+        .photo-section {
+            order: -1; /* Move photo to top on mobile */
+        }
+    }
+</style>
+</head>
+<body>
+
+<h1>Admin Panel - Lakshmir Bhandar</h1>
+<div id="loginBox">
+    <p style="font-weight: bold; color: #fbff00;">Admin Password</p>
+    <input type="password" id="adminPass" placeholder="Password" onkeydown="if(event.key === 'Enter') adminLogin()">
+    <br><br><button onclick="adminLogin()">Login</button>
+    <div id="statusMessage"></div>
+</div>
+
+<div class="panel" id="adminPanel" style="display:none;">
+  <h2>Registered Applicants</h2>
+
+  <!-- Top Controls: Search + Import/Export -->
+  <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin:10px 0;">
+    <input type="text" id="searchBox" placeholder="🔍 Search by Name..." 
+      style="padding:10px;width:250px;border-radius:8px;border:none;color:#000;font-weight:600;"
+      oninput="filterByName()">
+
+    <div style="display:flex; gap:10px;">
+      <button onclick="exportToCSV()" 
+        style="padding:10px 15px;border:none;border-radius:6px;background:#0078d7;color:#fff;font-weight:600;cursor:pointer;">
+        ⬆️ Export CSV
+      </button>
+      <input type="file" id="importFile" accept=".csv" style="display:none;" onchange="importFromCSV(event)">
+      <button onclick="document.getElementById('importFile').click()" 
+        style="padding:10px 15px;border:none;border-radius:6px;background:#28a745;color:#fff;font-weight:600;cursor:pointer;">
+        ⬇️ Import CSV
+      </button>
+    </div>
+  </div>
+
+  <div id="loading" style="text-align:center; color:#000;">Loading data...</div>
+
+  <table id="dataTable">
+    <thead></thead>
+    <tbody id="dataRows"></tbody>
+  </table>
+</div>
+
+
+<div id="dataModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('dataModal')">×</span>
+        <h3 id="dataModalTitle" style="margin-bottom: 15px;">Applicant Details: <span id="applicantNameHeader"></span></h3>
+        
+        <form id="fullEditForm">
+            <input type="hidden" id="editDocId">
+            <div class="modal-grid">
+                <div class="details-section" id="detailsSection">
+                    </div>
+                <div class="photo-section">
+                    <p>Applicant Photo</p>
+                    <img id="applicantPhoto" class="applicant-photo" src="" alt="Applicant Photo">
+                    <p id="noPhotoMsg" style="color: red; margin-top: 10px; display: none;">No Photo Available</p>
+                </div>
+            </div>
+            
+            <div class="modal-footer" id="modalFooter">
+                <p id="editStatusMessage" style="text-align: center; margin-bottom: 10px; color: red;"></p>
+                <button type="button" id="editButton" class="modal-button" onclick="toggleEditMode(true)">Edit Details</button>
+                <button type="submit" id="saveButton" class="modal-button" style="background:#00aaff; display:none;">Save All Updates</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const ADMIN_PASSWORD = "12345"; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzr6ctkFJZ5e9Yh3RCUtQjc-MfEGm_D0u-6ztm5NIGVChX3SnxHxUxC0kTyjeJivFazBQ/exec';
+    let sheetData = []; 
+    let currentApplicantData = {}; 
+
+    // --- Date Formatting Functions ---
+    function formatDateDisplay(dateVal) {
+        if (!dateVal || dateVal === "N/A" || dateVal === "") return "N/A";
+        try {
+            const d = new Date(dateVal);
+            if (isNaN(d.getTime())) return dateVal;
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            return `${day}-${month}-${year}`;
+        } catch (e) { return dateVal; }
+    }
+
+    function formatDateForInput(dateVal) {
+        if (!dateVal || dateVal === "N/A") return "";
+        try {
+            const d = new Date(dateVal);
+            if (isNaN(d.getTime())) return "";
+            return d.toISOString().split('T')[0];
+        } catch (e) { return ""; }
+    }
+
+    // --- UI Functions ---
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+        if (id === 'dataModal') toggleEditMode(false);
+    }
+
+    // --- Login & Data Loading ---
+    function adminLogin() {
+        const pass = document.getElementById("adminPass").value;
+        if (pass === ADMIN_PASSWORD) {
+            document.getElementById("loginBox").style.display = "none";
+            document.getElementById("adminPanel").style.display = "block";
+            loadData();
+        } else {
+            document.getElementById("statusMessage").textContent = "Wrong Password!";
+        }
+    }
+
+    async function loadData() {
+        const loading = document.getElementById("loading");
+        loading.style.display = "block";
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'fetch' })
+            });
+            sheetData = await response.json();
+            const displayHeaders = ['Name', 'Date_of_Birth', 'Father_Name', 'Aadhaar_Number', 'Address', 'Case_Status', 'Actions'];
+            renderTable(displayHeaders, sheetData);
+        } catch (error) {
+            loading.textContent = "Error: " + error.message;
+        }
+        loading.style.display = "none";
+    }
+
+    function renderTable(headers, data) {
+        const thead = document.querySelector("#dataTable thead");
+        const tbody = document.getElementById("dataRows");
+        thead.innerHTML = ""; tbody.innerHTML = "";
+        
+        const headerRow = document.createElement("tr");
+        headers.forEach(h => {
+            const th = document.createElement("th");
+            th.textContent = h.replace(/_/g, ' '); 
+            headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+
+        data.forEach(row => {
+            const tr = document.createElement("tr");
+            headers.forEach(headerKey => {
+                const td = document.createElement("td");
+                let value = row[headerKey] || 'N/A';
+
+                if (headerKey === 'Actions') {
+                    td.innerHTML = `<button onclick="openDataModal('${row.id}')">View Details</button>`;
+                } else if (headerKey === 'Case_Status') {
+                    td.textContent = value;
+                    td.style.fontWeight = 'bold';
+                    if (value === '4th District Verified') td.style.color = 'green';
+                    else if (value === 'Wait for Entry' || value === '1st Entry') td.style.color = 'orange';
+                    else td.style.color = 'blue';
+                } else if (headerKey === 'Date_of_Birth') {
+                    td.textContent = formatDateDisplay(value);
+                } else {
+                    td.textContent = value;
+                }
+                tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+        });
+    }
+
+    function filterByName() {
+        const q = document.getElementById("searchBox").value.toLowerCase();
+        const displayHeaders = ['Name', 'Date_of_Birth', 'Father_Name', 'Aadhaar_Number', 'Address', 'Case_Status', 'Actions'];
+        const filtered = sheetData.filter(r => (r.Name || "").toLowerCase().includes(q));
+        renderTable(displayHeaders, filtered);
+    }
+
+    const detailFields = [
+    { key: 'id', label: 'Sheet Row ID', editable: false }, 
+    { key: 'LB_ID', label: 'LB ID', editable: true },
+    { key: 'Name', label: 'Name', editable: true },
+    { key: 'Date_of_Birth', label: 'Date of Birth', editable: true, type: 'date' },
+    { key: 'Father_Name', label: "Father's Name", editable: true },
+    { key: 'Mother_Name', label: "Mother's Name", editable: true },
+    { key: 'Husband_Name', label: "Husband's Name", editable: true },
+    { key: 'Aadhaar_Number', label: 'Aadhaar Number', editable: true, maxLength: 12 },
+    { key: 'Voter_Number', label: 'Voter Number', editable: true },
+    { key: 'Caste_Number', label: 'Caste Certificate No.', editable: true },
+    { key: 'Swasthasathi_Number', label: 'Swasthasathi No.', editable: true },
+    { key: 'Address', label: 'Address', editable: true, type: 'textarea' },
+    { key: 'Mobile_Number', label: 'Mobile Number', editable: true, type: 'tel' },
+    
+    // ব্যাংক ডিটেইলস ড্রপডাউন
+    { key: 'Bank_Name', label: 'Bank Name', editable: true, type: 'select', 
+      options: ['Axis Bank', 'Bangiya Gramin Vikash Bank', 'Bank of Baroda', 'Bank of India', 'Bank of Maharashtra', 'Canara Bank', 'Central Bank of India', 'HDFC Bank', 'ICICI Bank', 'IDBI Bank', 'Indian Bank', 'Indian Overseas Bank', 'Indian Post Payment Bank', 'IndusInd Bank', 'Kotak Mahindra Bank', 'Punjab National Bank', 'State Bank of India', 'UCO Bank', 'Union Bank of India', 'Yes Bank'] },
+    { key: 'IFSC', label: 'IFSC Code', editable: true },
+    { key: 'Account_Number', label: 'Account Number', editable: true },
+    
+    // স্ট্যাটাস এবং পেমেন্ট ড্রপডাউন
+    { key: 'Case_Status', label: 'Case Status', editable: true, type: 'select', 
+      options: ['Wait for Entry', '1st Entry', '2nd submit', '3rd Block Verified', '4th District Verified'] },
+    { key: 'Bank_Validation', label: 'Bank Validation', editable: true, type: 'select', 
+      options: ['Waiting', 'Validation Success', 'Validation Error', 'A/c Blocked or Frozen', 'No Such Account', 'Reverted'] },
+    { key: 'Payment_Agreement', label: 'Payment Agreement', editable: true, type: 'select', 
+      options: ['0', '1500', '2000', '2500', '3000', '3500', '4000', '4500', '5000', '10000'] },
+    { key: 'Payment_Status', label: 'Payment Status', editable: true, type: 'select', 
+      options: ['No Payment', '1500', '2000', '2500', '3000', '3500', '4000', '4500', '5000', '10000', 'Payment Complete'] },
+    { key: 'Note', label: 'Note / Remarks', editable: true, type: 'textarea' }
+];
+    function openDataModal(docId) {
+        const applicant = sheetData.find(a => a.id == docId);
+        if (!applicant) return;
+        currentApplicantData = applicant; 
+        document.getElementById('editDocId').value = docId;
+        document.getElementById('applicantNameHeader').textContent = applicant.Name || 'N/A';
+        renderDetails(applicant, false);
+        
+        const photoImg = document.getElementById('applicantPhoto');
+        const noPhotoMsg = document.getElementById('noPhotoMsg');
+        if (applicant.Photo_Upload && applicant.Photo_Upload.includes('data:image')) {
+            photoImg.src = applicant.Photo_Upload;
+            photoImg.style.display = 'block';
+            noPhotoMsg.style.display = 'none';
+        } else {
+            photoImg.style.display = 'none';
+            noPhotoMsg.style.display = 'block';
+        }
+        openModal('dataModal');
+    }
+
+    function toggleEditMode(isEdit) {
+        renderDetails(currentApplicantData, isEdit);
+        document.getElementById('editButton').style.display = isEdit ? 'none' : 'inline-block';
+        document.getElementById('saveButton').style.display = isEdit ? 'inline-block' : 'none';
+    }
+
+    // --- রেন্ডার ফাংশন (যা ড্রপডাউন তৈরি করবে) ---
+function renderDetails(applicant, isEdit) {
+    const detailsDiv = document.getElementById('detailsSection');
+    detailsDiv.innerHTML = '';
+
+    detailFields.forEach(field => {
+        const key = field.key;
+        let value = applicant[key] || '';
+
+        if (isEdit && field.editable) {
+            let inputElement;
+            if (field.type === 'select') {
+                // ড্রপডাউন লজিক
+                let optionsHtml = field.options.map(opt => 
+                    `<option value="${opt}" ${opt == value ? 'selected' : ''}>${opt}</option>`
+                ).join('');
+                inputElement = `<select name="${key}" class="editable-input">${optionsHtml}</select>`;
+            } else if (field.type === 'textarea') {
+                inputElement = `<textarea name="${key}" class="editable-input">${value}</textarea>`;
+            } else if (field.type === 'date') {
+                // তারিখ ইনপুটের জন্য ফরম্যাট ঠিক করা
+                let dateVal = "";
+                if (value) {
+                    const d = new Date(value);
+                    if (!isNaN(d.getTime())) dateVal = d.toISOString().split('T')[0];
+                }
+                inputElement = `<input type="date" name="${key}" class="editable-input" value="${dateVal}">`;
+            } else {
+                inputElement = `<input type="${field.type || 'text'}" name="${key}" class="editable-input" value="${value}">`;
+            }
+            detailsDiv.innerHTML += `<div class="form-group"><label><strong>${field.label}:</strong></label>${inputElement}</div>`;
+        } else {
+            // ভিউ মোড
+            let displayValue = (field.type === 'date' || key === 'Date_of_Birth') ? formatDateDisplay(value) : (value || 'N/A');
+            detailsDiv.innerHTML += `<p><strong>${field.label}:</strong> ${displayValue}</p>`;
+        }
+    });
+}
+
+    document.getElementById('fullEditForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const docId = document.getElementById('editDocId').value;
+        const statusMsg = document.getElementById('editStatusMessage');
+        statusMsg.textContent = 'Saving to Google Sheets...';
+        
+        const formData = new FormData(e.target);
+        const updates = {};
+        detailFields.filter(f => f.editable).forEach(f => {
+            updates[f.key] = formData.get(f.key);
+        });
+
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'update', id: docId, updates: updates })
+            });
+            const result = await response.json();
+            if (result.result === 'success') {
+                statusMsg.textContent = '✅ Updated Successfully!';
+                setTimeout(() => { closeModal('dataModal'); loadData(); }, 1000);
+            }
+        } catch (error) {
+            statusMsg.textContent = '❌ Update Failed!';
+        }
+    });
+
+    function exportToCSV() {
+        if (sheetData.length === 0) return;
+        const headers = Object.keys(sheetData[0]);
+        const csvRows = [headers.join(",")];
+        sheetData.forEach(row => {
+            const values = headers.map(h => `"${(row[h] || '').toString().replace(/"/g, '""')}"`);
+            csvRows.push(values.join(","));
+        });
+        const blob = new Blob([csvRows.join("\n")], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url; a.download = "LB_Data.csv"; a.click();
+    }
+
+    document.addEventListener('contextmenu', e => e.preventDefault());
+</script>
+</body>
+</html>
