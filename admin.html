@@ -29,72 +29,154 @@
     input{padding:10px;border-radius:8px;border:none;}
     #statusMessage {margin-top: 15px; font-weight: 600; color: #ff0;}
     
-    /* Modal Styles */
+    /* Modal Overlay */
     .modal {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.7); display: none;
-        align-items: center; justify-content: center; z-index: 1000;
-        backdrop-filter: blur(5px);
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(6px);
     }
-    .modal.active {display: flex;}
+    .modal.active { display:flex; }
+
+    /* Modal Box */
     .modal-content {
-        background: #b6f9ff; border-radius: 15px; padding: 30px;
-        width: 95%; max-width: 800px; /* Increased max width */
-        max-height: 90vh; overflow-y: auto;
-        color: #333; position: relative;
+    background: linear-gradient(135deg,#e0fbff,#ffffff);
+    border-radius: 18px;
+    padding: 28px;
+    width: 95%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    color: #333;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
     }
+
+    /* Close Button */
     .close {
-        position: absolute; top: 15px; right: 25px; font-size: 30px; 
-        color: #FF6F91; cursor: pointer; font-weight: 300; transition: transform 0.2s;
+    position: absolute;
+    top: 16px;
+    right: 22px;
+    font-size: 30px;
+    color: #ff4d6d;
+    cursor: pointer;
+    transition: transform .2s;
     }
-    .modal-content h3 {margin-top: 0; color: #01aaff;}
-    
-    /* New styles for two-column modal */
+    .close:hover { transform: scale(1.1); }
+
+    /* Header */
+    .modal-content h3 {
+    color: #023e8a;
+    font-weight: 700;
+    }
+
+    /* Grid Layout */
     .modal-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr; /* Details on left, Photo on right */
-        gap: 20px;
+    display: grid;
+    grid-template-columns: 2.2fr 1fr;
+    gap: 24px;
+    margin-top: 15px;
+    }
+
+    /* Details Section */
+    .details-section {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: inset 0 0 0 1px #eef2f5;
     }
     .details-section p {
-        margin: 5px 0; border-bottom: 1px dotted #eee; padding-bottom: 5px;
+    margin: 6px 0;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed #e5e5e5;
+    font-size: 14px;
     }
-    .details-section p strong, .details-section label strong {
-        min-width: 150px; display: inline-block; color: #d800e4; font-weight: 600;
+    .details-section p:last-child { border-bottom:none; }
+
+    .details-section strong {
+    min-width: 180px;
+    display: inline-block;
+    color: #6a00f4;
+    font-weight: 600;
     }
+
+    /* Photo Section */
     .photo-section {
-        text-align: center;
+    background: transparent; /* আগের white সরানো */
+    box-shadow: none;        /* shadow সরানো যদি লম্বা সাদা দেখাচ্ছে */
+    padding: 0;              /* অতিরিক্ত padding কমানো */
+    text-align: center;
+}
+    .photo-section p {
+    font-weight: 600;
+    color: #444;
     }
+    .photo-section img.applicant-photo {
+    border-radius: 12px;
+    max-height: 260px;
+    width: auto;
+    object-fit: cover;
+    border: 4px solid #e0fbff;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+    /* Applicant Photo */
     .applicant-photo {
-        max-width: 100%;
-        height: auto;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        margin-top: 10px;
+    width: 100%;
+    max-height: 260px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-top: 10px;
+    border: 4px solid #e0fbff;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     }
+
+    /* Footer */
     .modal-footer {
-        text-align: right;
-        border-top: 1px solid #eee;
-        padding-top: 15px;
-        margin-top: 15px;
+    text-align: right;
+    border-top: 1px solid #e5e5e5;
+    padding-top: 15px;
+    margin-top: 20px;
     }
     .modal-footer button {
-        background: #FF6F91; /* Highlight edit button */
-        margin-left: 10px;
+    background: linear-gradient(135deg,#ff6f91,#ff9671);
+    border: none;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
     }
     .modal-footer button:hover {
-        background: #d45172;
+    opacity: .9;
     }
-    .details-section label {
-        display: block; margin-top: 10px;
-    }
+
+    /* Inputs (if any visible) */
     .editable-input {
-        width: 100%;
-        padding: 6px;
-        margin-top: 2px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 14px;
+    width: 100%;
+    padding: 7px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
     }
+
+    /* Print Button (unchanged, polished) */
+    .print-btn {
+    background:#1e88e5;
+    color:#fff;
+    border:none;
+    padding:6px 14px;
+    margin-right: 50px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:13px;
+    }
+    .print-btn:hover { background:#059827; }
+
+    /* Mobile Responsive */
+
     @media (max-width: 700px) {
         .modal-grid {
             grid-template-columns: 1fr;
@@ -145,12 +227,18 @@
   </table>
 </div>
 
-
-<div id="dataModal" class="modal">
+    <div id="dataModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('dataModal')">×</span>
-        <h3 id="dataModalTitle" style="margin-bottom: 15px;">Applicant Details: <span id="applicantNameHeader"></span></h3>
-        
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h3 style="margin:0;">
+            Applicant Details: 
+            <span id="applicantNameHeader" style="color:#0077b6;"></span>
+        </h3>
+        <button onclick="printApplicant()" class="print-btn">🖨️ Print</button>
+        </div>
+
         <form id="fullEditForm">
             <input type="hidden" id="editDocId">
             <div class="modal-grid">
@@ -228,7 +316,7 @@
                 body: JSON.stringify({ action: 'fetch' })
             });
             sheetData = await response.json();
-            const displayHeaders = ['Name', 'Date_of_Birth', 'Father_Name', 'Aadhaar_Number', 'Address', 'Case_Status', 'Actions'];
+            const displayHeaders = ['Name', 'Date_of_Birth', 'Father_Name', 'Aadhaar_Number', 'Village', 'Case_Status', 'Actions'];
             renderTable(displayHeaders, sheetData);
         } catch (error) {
             loading.textContent = "Error: " + error.message;
@@ -276,43 +364,68 @@
 
     function filterByName() {
         const q = document.getElementById("searchBox").value.toLowerCase();
-        const displayHeaders = ['Name', 'Date_of_Birth', 'Father_Name', 'Aadhaar_Number', 'Address', 'Case_Status', 'Actions'];
+        const displayHeaders = ['Name', 'Date_of_Birth', 'Father_Name', 'Aadhaar_Number', 'Village', 'Case_Status', 'Actions'];
         const filtered = sheetData.filter(r => (r.Name || "").toLowerCase().includes(q));
         renderTable(displayHeaders, filtered);
     }
 
     const detailFields = [
-    { key: 'id', label: 'Sheet Row ID', editable: false }, 
-    { key: 'LB_ID', label: 'LB ID', editable: true },
-    { key: 'Name', label: 'Name', editable: true },
-    { key: 'Date_of_Birth', label: 'Date of Birth', editable: true, type: 'date' },
-    { key: 'Father_Name', label: "Father's Name", editable: true },
-    { key: 'Mother_Name', label: "Mother's Name", editable: true },
-    { key: 'Husband_Name', label: "Husband's Name", editable: true },
-    { key: 'Aadhaar_Number', label: 'Aadhaar Number', editable: true, maxLength: 12 },
-    { key: 'Voter_Number', label: 'Voter Number', editable: true },
-    { key: 'Caste_Number', label: 'Caste Certificate No.', editable: true },
-    { key: 'Swasthasathi_Number', label: 'Swasthasathi No.', editable: true },
-    { key: 'Address', label: 'Address', editable: true, type: 'textarea' },
-    { key: 'Mobile_Number', label: 'Mobile Number', editable: true, type: 'tel' },
-    
-    // ব্যাংক ডিটেইলস ড্রপডাউন
-    { key: 'Bank_Name', label: 'Bank Name', editable: true, type: 'select', 
-      options: ['Axis Bank', 'Bangiya Gramin Vikash Bank', 'Bank of Baroda', 'Bank of India', 'Bank of Maharashtra', 'Canara Bank', 'Central Bank of India', 'HDFC Bank', 'ICICI Bank', 'IDBI Bank', 'Indian Bank', 'Indian Overseas Bank', 'Indian Post Payment Bank', 'IndusInd Bank', 'Kotak Mahindra Bank', 'Punjab National Bank', 'State Bank of India', 'UCO Bank', 'Union Bank of India', 'Yes Bank'] },
-    { key: 'IFSC', label: 'IFSC Code', editable: true },
-    { key: 'Account_Number', label: 'Account Number', editable: true },
-    
-    // স্ট্যাটাস এবং পেমেন্ট ড্রপডাউন
-    { key: 'Case_Status', label: 'Case Status', editable: true, type: 'select', 
-      options: ['Wait for Entry', '1st Entry', '2nd submit', '3rd Block Verified', '4th District Verified'] },
-    { key: 'Bank_Validation', label: 'Bank Validation', editable: true, type: 'select', 
-      options: ['Waiting', 'Validation Success', 'Validation Error', 'A/c Blocked or Frozen', 'No Such Account', 'Reverted'] },
-    { key: 'Payment_Agreement', label: 'Payment Agreement', editable: true, type: 'select', 
-      options: ['0', '1500', '2000', '2500', '3000', '3500', '4000', '4500', '5000', '10000'] },
-    { key: 'Payment_Status', label: 'Payment Status', editable: true, type: 'select', 
-      options: ['No Payment', '1500', '2000', '2500', '3000', '3500', '4000', '4500', '5000', '10000', 'Payment Complete'] },
-    { key: 'Note', label: 'Note / Remarks', editable: true, type: 'textarea' }
+  { key: 'Timestamp', label: 'Entry Time', editable: false },
+  { key: 'LB_ID', label: 'LB ID', editable: true },
+
+  { key: 'Name', label: 'Name', editable: true },
+  { key: 'Date_of_Birth', label: 'Date of Birth', editable: false, type: 'date' },
+  { key: 'Age_2026', label: 'Age (as on 01/01/2026)', editable: false },
+
+  { key: 'Father_Name', label: "Father's Name", editable: true },
+  { key: 'Mother_Name', label: "Mother's Name", editable: true },
+
+  { key: 'Marital_Status', label: 'Marital Status', editable: true, type: 'select',
+    options: ['Unmarried', 'Married', 'Widow', 'Divorced'] },
+
+  { key: 'Husband_Name', label: "Husband's Name", editable: true },
+
+  { key: 'Aadhaar_Number', label: 'Aadhaar Number', editable: true },
+  { key: 'Voter_Number', label: 'Voter ID Number', editable: true },
+
+  { key: 'Caste_Category', label: 'Caste Category', editable: true, type: 'select',
+    options: ['General', 'SC', 'ST', 'Others'] },
+
+  { key: 'Caste_Number', label: 'Caste Certificate No.', editable: true },
+
+  { key: 'Ration_Number', label: 'Ration Card No.', editable: true },
+  { key: 'Swasthasathi_Number', label: 'Swasthasathi No.', editable: true },
+
+  { key: 'Village', label: 'Village', editable: true },
+  { key: 'Post_Office', label: 'Post Office', editable: true },
+  { key: 'Gram_Panchayat', label: 'Gram Panchayat', editable: true },
+  { key: 'Police_Station', label: 'Police Station', editable: true },
+  { key: 'District', label: 'District', editable: true },
+  { key: 'Pin_Code', label: 'PIN Code', editable: true },
+
+  { key: 'Bank_Name', label: 'Bank Name', editable: true },
+  { key: 'Bank_Branch', label: 'Bank Branch', editable: true },
+  { key: 'IFSC', label: 'IFSC Code', editable: true },
+  { key: 'Account_Number', label: 'Account Number', editable: true },
+
+  { key: 'Mobile_Number', label: 'Mobile Number', editable: true },
+  { key: 'Email', label: 'Email ID', editable: true },
+
+  { key: 'Case_Status', label: 'Case Status', editable: true, type: 'select',
+    options: ['Wait for Entry', '1st Entry', '2nd Submit', '3rd Block Verified', '4th District Verified'] },
+
+  { key: 'Bank_Validation', label: 'Bank Validation', editable: true, type: 'select',
+    options: ['Waiting', 'Validation Success', 'Validation Error', 'No Such Account', 'Account Frozen'] },
+
+  { key: 'Payment_Agreement', label: 'Payment Agreement Amount', editable: true, type: 'select',
+    options: ['0', '1500', '2000', '2500', '3000', '3500','4000','4500', '5000', '10000'] },
+
+  { key: 'Payment_Status', label: 'Payment Status', editable: true, type: 'select',
+    options: ['No Payment', '1000', '1500', '2000', '2500', '3000', '3500','4000','4500', '5000', 'Payment Complete'] },
+
+  { key: 'Note', label: 'Note / Remarks', editable: true, type: 'textarea' }
 ];
+
     function openDataModal(docId) {
         const applicant = sheetData.find(a => a.id == docId);
         if (!applicant) return;
@@ -360,11 +473,21 @@ function renderDetails(applicant, isEdit) {
             } else if (field.type === 'textarea') {
                 inputElement = `<textarea name="${key}" class="editable-input">${value}</textarea>`;
             } else if (field.type === 'date') {
-                // তারিখ ইনপুটের জন্য ফরম্যাট ঠিক করা
                 let dateVal = "";
                 if (value) {
-                    const d = new Date(value);
-                    if (!isNaN(d.getTime())) dateVal = d.toISOString().split('T')[0];
+                    // Remove time part if exists
+                    if (value.includes('T')) {
+                        dateVal = value.split('T')[0];
+                    } else {
+                        const parts = value.toString().split(/[-/]/);
+                        if (parts.length === 3) {
+                            if (parts[0].length === 4) {
+                                dateVal = `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
+                            } else {
+                                dateVal = `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+                            }
+                        }
+                    }
                 }
                 inputElement = `<input type="date" name="${key}" class="editable-input" value="${dateVal}">`;
             } else {
@@ -419,6 +542,146 @@ function renderDetails(applicant, isEdit) {
         const a = document.createElement("a");
         a.href = url; a.download = "LB_Data.csv"; a.click();
     }
+
+    function printApplicant() {
+
+  // fields to hide in print
+  const hiddenFields = [
+    'Case Status',
+    'Bank Validation',
+    'Payment Agreement Amount',
+    'Payment Status',
+    'Note / Remarks'
+  ];
+
+  // clone details HTML
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = document.getElementById("detailsSection").innerHTML;
+
+  // remove unwanted fields
+  tempDiv.querySelectorAll('p').forEach(p => {
+    const label = p.querySelector('strong')?.innerText.replace(':','').trim();
+    if (hiddenFields.includes(label)) {
+      p.remove();
+    }
+  });
+
+  const detailsHTML = tempDiv.innerHTML;
+
+  // photo
+  const photoEl = document.getElementById("applicantPhoto");
+  const photoHTML = (photoEl && photoEl.src)
+    ? `<img src="${photoEl.src}" />`
+    : `<div class="no-photo">No Photo</div>`;
+
+  const name = currentApplicantData.Name || '';
+
+  const win = window.open('', '', 'width=1000,height=900');
+  win.document.write(`
+    <html>
+    <head>
+      <title>${name} - Application</title>
+      <style>
+        body {
+          font-family: "Segoe UI", Arial, sans-serif;
+          padding: 30px;
+          color: #000;
+        }
+        .header {
+          text-align: center;
+          border-bottom: 2px solid #000;
+          padding-bottom: 10px;
+          margin-bottom: 20px;
+        }
+        .header h2 {
+          margin: 0;
+          font-size: 22px;
+          letter-spacing: 1px;
+        }
+        .header p {
+          margin: 4px 0 0;
+          font-size: 13px;
+        }
+        .container {
+          display: flex;
+          gap: 30px;
+        }
+        .details {
+          flex: 2;
+        }
+        .details p {
+          font-size: 14px;
+          margin: 6px 0;
+        }
+        .details strong {
+          display: inline-block;
+          width: 230px;
+        }
+        .photo-box {
+          flex: 1;
+          text-align: center;
+        }
+        .photo-box img {
+          width: 160px;
+          height: 200px;
+          object-fit: cover;
+          border: 1px solid #000;
+          border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .no-photo {
+          width: 160px;
+          height: 200px;
+          border: 1px dashed #666;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 12px;
+        }
+        .footer {
+          margin-top: 40px;
+          display: flex;
+          justify-content: space-between;
+          font-size: 13px;
+        }
+        .footer div {
+          border-top: 1px solid #000;
+          width: 200px;
+          text-align: center;
+          padding-top: 5px;
+        }
+        button { display:none; }
+      </style>
+    </head>
+
+    <body>
+      <div class="header">
+        <h2>APPLICATION DETAILS</h2>
+        <p>(Computer Generated Copy)</p>
+      </div>
+
+      <div class="container">
+        <div class="details">
+          ${detailsHTML}
+        </div>
+        <div class="photo-box">
+          ${photoHTML}
+          <p style="margin-top:8px;font-size:13px;">Applicant Photo</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Digi World</div>
+        <div>Applicant Signature</div>
+      </div>
+    </body>
+    </html>
+  `);
+
+  win.document.close();
+  win.focus();
+  win.print();
+}
 
     document.addEventListener('contextmenu', e => e.preventDefault());
 </script>

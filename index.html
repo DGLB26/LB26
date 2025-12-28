@@ -293,48 +293,193 @@ button.submit:hover {
     </header>
 
     <form id="regForm">
-      <div class="two">
-        <div><label>Name</label><input id="name" name="Name" type="text" required /></div>
-        <div><label>Date of Birth</label><input id="dob" name="Date_of_Birth" type="date" required /></div>
-      </div>
-      <div class="two">
-        <div><label>Father's Name</label><input id="father" name="Father_Name" type="text" required /></div>
-        <div><label>Mother's Name</label><input id="mother" name="Mother_Name" type="text" required /></div>
-      </div>
-      <label>Husband's Name (if applicable)</label><input id="husband" name="Husband_Name" type="text" />
-      <div class="two">
-        <div><label>Aadhaar Number</label><input id="aadhaar" name="Aadhaar_Number" type="text" maxlength="12" required /></div>
-        <div><label>Voter Number</label><input id="voter" name="Voter_Number" type="text" /></div>
-      </div>
-      <div class="two">
-        <div><label>Caste Certificate Number</label><input id="caste" name="Caste_Number" type="text" /></div>
-        <div><label>Swasthasathi Card Number</label><input id="swasthasathi" name="Swasthasathi_Number" type="text" /></div>
-      </div>
-      <label>Address</label><textarea id="address" name="Address" rows="2" required></textarea>
-      <div class="two">
-        <div>
-          <label>Bank Name</label>
-          <select id="bank" name="Bank_Name" required>
-            <option value="">-- Select Bank --</option>
-            <option>Axis Bank</option><option>Bangiya Gramin Vikash Bank</option><option>Bank of Baroda</option><option>Bank of India</option>
-            <option>Bank of Maharashtra</option><option>Canara Bank</option><option>Central Bank of India</option>
-            <option>HDFC Bank</option><option>ICICI Bank</option><option>IDBI Bank</option>
-            <option>Indian Bank</option><option>Indian Overseas Bank</option><option>Indian Post Payment Bank</option><option>IndusInd Bank</option>
-            <option>Kotak Mahindra Bank</option><option>Punjab National Bank</option><option>State Bank of India</option>
-            <option>UCO Bank</option><option>Union Bank of India</option><option>Yes Bank</option>
-          </select>
-        </div>
-        <div><label>IFSC</label><input id="ifsc" name="IFSC" type="text" maxlength="11" required /></div>
-      </div>
-      <div class="two">
-        <div><label>Account Number</label><input id="account" name="Account_Number" type="text" required /></div>
-        <div><label>Mobile Number</label><input id="mobile" name="Mobile_Number" type="tel" maxlength="10" required /></div>
-      </div>
-        <label for="photo">Photo Upload</label>
-        <input id="photo" name="Photo" type="file" accept="image/*"  />
-      <button type="submit" class="submit">Submit Registration Data</button>
-      <div id="status"></div>
-    </form>
+
+  <!-- PERSONAL INFORMATION -->
+  <label>Name</label>
+  <input id="name" name="Name" type="text" required />
+
+  <div class="two">
+    <div>
+      <label>Date of Birth</label>
+      <input id="dob" name="Date_of_Birth" type="date" required />
+    </div>
+    <div>
+  <label>Age (as on 01/01/2026)</label>
+  <input type="text" id="ageDisplay" readonly />
+  <input type="hidden" id="ageValue" name="Age_2026" />
+</div>
+
+  </div>
+
+  <div class="two">
+    <div>
+      <label>Father's Name</label>
+      <input id="father" name="Father_Name" type="text" required />
+    </div>
+    <div>
+      <label>Mother's Name</label>
+      <input id="mother" name="Mother_Name" type="text" required />
+    </div>
+  </div>
+
+  <div class="two">
+    <div>
+      <label>Marital Status</label>
+      <select name="Marital_Status" required>
+        <option value="">-- Select --</option>
+        <option>Married</option>
+        <option>Unmarried</option>
+        <option>Widow</option>
+        <option>Divorced</option>
+      </select>
+    </div>
+    <div>
+      <label>Husband's Name (if applicable)</label>
+  <input id="husband" name="Husband_Name" type="text" />
+      
+    </div>
+  </div>
+
+  <!-- IDENTIFICATION -->
+  <div class="two">
+    <div>
+      <label>Aadhaar Number</label>
+      <input id="aadhaar" name="Aadhaar_Number" maxlength="12" pattern="\d*" inputmode="numeric" required />
+    </div>
+    <div>
+      <label>Voter Number</label>
+      <input id="voter" name="Voter_Number" type="text" />
+    </div>
+  </div>
+
+  <div class="two">
+    <div>
+      
+  <label>Caste Category</label>
+  <select name="Caste_Category" required>
+    <option value="">-- Select --</option>
+    <option>General</option>
+    <option>SC</option>
+    <option>ST</option>
+    <option>Others</option>
+  </select>
+    </div>
+    <div>
+      <label>Caste Certificate Number</label>
+      <input id="caste" name="Caste_Number" type="text" />
+    </div>
+  </div>
+  <div class="two">
+    <div>
+      <label>Ration Card Number</label>
+      <input name="Ration_Number" type="text" />
+    </div>
+    <div>
+      <label>Swasthasathi Card Number</label>
+  <input id="swasthasathi" name="Swasthasathi_Number" type="text" />
+    </div>
+  </div>
+
+  <!-- ADDRESS -->
+  <div class="two">
+    <div>
+      <label>Village</label>
+      <input name="Village" required />
+    </div>
+    <div>
+      <label>Post Office</label>
+      <input name="Post_Office" required />
+    </div>
+  </div>
+
+  <div class="two">
+    <div>
+      <label>Gram Panchayat</label>
+      <input name="Gram_Panchayat" />
+    </div>
+    <div>
+      <label>Police Station</label>
+      <input name="Police_Station" required />
+    </div>
+  </div>
+
+  <div class="two">
+    <div>
+      <label>District</label>
+      <input name="District" required />
+    </div>
+    <div>
+      <label>Pin Code</label>
+      <input id="pin" name="Pin_Code" maxlength="6" pattern="\d*" inputmode="numeric" required />
+    </div>
+  </div>
+
+  <!-- BANK DETAILS -->
+  <div class="two">
+    <div>
+      <label>Bank Name</label>
+      <select id="bank" name="Bank_Name" required>
+        <option value="">-- Select Bank --</option>
+        <option>Axis Bank</option>
+        <option>Bangiya Gramin Vikash Bank</option>
+        <option>Bank of Baroda</option>
+        <option>Bank of India</option>
+        <option>Canara Bank</option>
+        <option>Central Bank of India</option>
+        <option>HDFC Bank</option>
+        <option>ICICI Bank</option>
+        <option>IDBI Bank</option>
+        <option>Indian Bank</option>
+        <option>Indian Overseas Bank</option>
+        <option>Indian Post Payment Bank</option>
+        <option>IndusInd Bank</option>
+        <option>Kotak Mahindra Bank</option>
+        <option>Punjab National Bank</option>
+        <option>State Bank of India</option>
+        <option>UCO Bank</option>
+        <option>Union Bank of India</option>
+        <option>Yes Bank</option>
+      </select>
+    </div>
+    <div>
+      <label>Bank Branch Name</label>
+      <input name="Bank_Branch" required />
+    </div>
+  </div>
+
+  <div class="two">
+    <div>
+      <label>IFSC</label>
+      <input id="ifsc" name="IFSC" type="text" maxlength="11" required />
+    </div>
+    <div>
+      <label>Account Number</label>
+      <input  id="account"  name="Account_Number"  type="text"  maxlength="18"  pattern="\d*"  inputmode="numeric"  required/>
+
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="two">
+    <div>
+      <label>Mobile Number</label>
+      <input id="mobile" name="Mobile_Number" maxlength="10" pattern="\d*" inputmode="numeric" required />
+    </div>
+    <div>
+      <label>Email ID (optional)</label>
+      <input type="email" name="Email" />
+    </div>
+  </div>
+
+  <!-- PHOTO -->
+  <label>Photo Upload (Max 1 MB)</label>
+  <input id="photo" name="Photo" type="file" accept="image/*" required />
+
+  <button type="submit" class="submit">Submit Registration Data</button>
+  <div id="status"></div>
+
+</form>
+
   </div>
 </div>
 <script>
@@ -357,8 +502,27 @@ function closeModal(id) {
 }
 
 // Auto uppercase
-document.querySelectorAll('#name, #father, #mother, #husband, #voter, #caste, #ifsc').forEach(i => {
-  i.addEventListener('input', () => { i.value = i.value.toUpperCase(); });
+document.querySelectorAll(
+  `
+  #name,
+  #father,
+  #mother,
+  #husband,
+  #voter,
+  #caste,
+  #ifsc,
+  input[name="Village"],
+  input[name="Post_Office"],
+  input[name="Gram_Panchayat"],
+  input[name="Police_Station"],
+  input[name="District"],
+  input[name="Bank_Branch"],
+  input[name="Ration_Number"]
+  `
+).forEach(input => {
+  input.addEventListener('input', () => {
+    input.value = input.value.toUpperCase();
+  });
 });
 
 // File to Base64 Conversion
@@ -391,6 +555,11 @@ document.getElementById("regForm").addEventListener("submit", async (e) => {
         s.textContent = "❌ Please upload a Photo.";
         return;
     }
+    // Photo size validation (UNDER 1 MB)
+if (photoInput.files[0].size > 1024 * 1024) {
+  s.textContent = "❌ Photo size must be under 1 MB.";
+  return;
+}
 
     s.innerHTML = "⏳ Registering... Please wait.";
     
@@ -436,6 +605,50 @@ document.getElementById("regForm").addEventListener("submit", async (e) => {
         s.textContent = `❌ Submission Failed! Check Console.`;
         console.error('Error:', error);
     }
+});
+
+// 🎂 Auto Age Calculate (as on 01-01-2026)
+document.getElementById("dob").addEventListener("change", function () {
+  const dob = new Date(this.value);
+  if (isNaN(dob)) return;
+
+  const targetDate = new Date("2026-01-01");
+
+  // Future DOB block
+  if (dob > targetDate) {
+    document.getElementById("ageDisplay").value = "";
+    document.getElementById("ageValue").value = "";
+    return;
+  }
+
+  let age = targetDate.getFullYear() - dob.getFullYear();
+  const m = targetDate.getMonth() - dob.getMonth();
+  if (m < 0 || (m === 0 && targetDate.getDate() < dob.getDate())) {
+    age--;
+  }
+
+  // 👁️ User will see
+  document.getElementById("ageDisplay").value = age + " Years";
+
+  // 📤 Sheet will get
+  document.getElementById("ageValue").value = age;
+});
+
+["aadhaar","account","mobile","pin"].forEach(id => {
+  document.getElementById(id).addEventListener("input", function () {
+    this.value = this.value.replace(/\D/g, "");
+  });
+});
+const marital = document.querySelector('select[name="Marital_Status"]');
+const husband = document.getElementById("husband");
+
+marital.addEventListener("change", () => {
+  if (marital.value !== "Married") {
+    husband.value = "";
+    husband.disabled = true;
+  } else {
+    husband.disabled = false;
+  }
 });
 
 // Protection
