@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin - Lakshmir Bhandar Data</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+    body{
+      font-family:'Poppins',sans-serif;
+      background:linear-gradient(135deg,#00ffcc,#0066ff);
+      min-height:100vh;
+      display:flex;flex-direction:column;align-items:center;padding:20px;color:#fff;
+      overflow-x: auto; /* Allows horizontal scrolling for wide table */
+    }
+    h1{margin-top:20px;}
+    .panel{
+      width:100%; max-width:1400px; background:rgba(255,255,255,0.1);
+      backdrop-filter:blur(10px);padding:20px;border-radius:20px;margin-top:20px;
+      box-shadow:0 5px 20px rgba(0,0,0,0.3);
+    }
+    table{min-width: 800px; width:100%;border-collapse:collapse;margin-top:10px;background:rgba(255,255,255,0.9);color:#000;}
+    th,td{border:1px solid #ccc;padding:8px;text-align:left; white-space: nowrap; font-size: 13px;}
+    th{background:#0072ff;color:#fff; cursor: pointer;}
+    th:hover {background: #005bb5;}
+    button{background:#ff6a00;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer; margin: 2px 5px;}
+    button:hover{transform:scale(1.05);}
+    /* --- Login Box Enhanced Design --- */
+/* Login Modal Overlay */
+.login-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.25s ease-in-out;
+  z-index: 9999;
+}
+
+/* Show Modal */
+.login-modal.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Card */
+.login-card {
+  background: #ffffff38;
+  padding: 28px 20px 24px;
+  border-radius: 10px;
+  border: 3px solid #ffffffb4;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.24);
+  position: relative;
+  text-align: center;
+}
+
+/* Title */
+.login-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #023e8a;
+  margin-bottom: 18px;
+}
+
+/* Inputs */
+.login-card input {
+  width: 80%;
+  padding: 12px 10px;
+  font-size: 15px;
+  border: 1px solid #8e8e8e;
+  border-radius: 8px;
+  margin: 10px 0;
+  outline: none;
+}
+.login-card input:focus {
+  border-color: #0073ff;
+  box-shadow: 0 0 0 2px rgba(0, 118, 182, 0.422);
+}
+
+/* Button */
+.login-card button {
+  width: 30%;
+  padding: 12px;
+  font-size: 16px;
+  background: #0189f1;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 12px;
+}
+.login-card button:hover {
+  background: #00c110;
+}
+#statusMessage {
+    margin-top: 15px;
+    font-weight: 600;
+    color: #faffae;
+}
+/* Error Message */
+#loginErrorMsg {
+  font-size: 14px;
+  color: #d90429;
+  margin-top: 10px;
+}
+
+/* Close button */
+.login-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+    
+    /* Modal Overlay */
+    .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(6px);
+    }
+    .modal.active { display:flex; }
+
+    /* Modal Box */
+    .modal-content {
+    background: linear-gradient(135deg,#e0fbff,#ffffff);
+    border-radius: 18px;
+    padding: 28px;
+    width: 95%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    color: #333;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+
+    /* Close Button */
+    .close {
+    position: absolute;
+    top: 16px;
+    right: 22px;
+    font-size: 30px;
+    color: #ff4d6d;
+    cursor: pointer;
+    transition: transform .2s;
+    }
+    .close:hover { transform: scale(1.1); }
+
+    /* Header */
+    .modal-content h3 {
+    color: #023e8a;
+    font-weight: 700;
+    }
+
+    /* Grid Layout */
+    .modal-grid {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr;
+    gap: 24px;
+    margin-top: 15px;
+    }
+
+    /* Details Section */
+    .details-section {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: inset 0 0 0 1px #eef2f5;
+    }
+    .details-section p {
+    margin: 6px 0;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed #e5e5e5;
+    font-size: 14px;
+    }
+    .details-section p:last-child { border-bottom:none; }
+
+    .details-section strong {
+    min-width: 180px;
+    display: inline-block;
+    color: #6a00f4;
+    font-weight: 600;
+    }
+
+    /* Photo Section */
+    .photo-section {
+    background: transparent; /* আগের white সরানো */
+    box-shadow: none;        /* shadow সরানো যদি লম্বা সাদা দেখাচ্ছে */
+    padding: 0;              /* অতিরিক্ত padding কমানো */
+    text-align: center;
+}
+    .photo-section p {
+    font-weight: 600;
+    color: #444;
+    }
+    .photo-section img.applicant-photo {
+    border-radius: 12px;
+    max-height: 260px;
+    width: auto;
+    object-fit: cover;
+    border: 4px solid #e0fbff;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+    /* Applicant Photo */
+    .applicant-photo {
+    width: 100%;
+    max-height: 260px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-top: 10px;
+    border: 4px solid #e0fbff;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    /* Footer */
+    .modal-footer {
+    text-align: right;
+    border-top: 1px solid #e5e5e5;
+    padding-top: 15px;
+    margin-top: 20px;
+    }
+    .modal-footer button {
+    background: linear-gradient(135deg,#ff6f91,#ff9671);
+    border: none;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    }
+    .modal-footer button:hover {
+    opacity: .9;
+    }
+
+    /* Inputs (if any visible) */
+    .editable-input {
+    width: 100%;
+    padding: 7px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    }
+
+    /* Print Button (unchanged, polished) */
+    .print-btn {
+    background:#1e88e5;
+    color:#fff;
+    border:none;
+    padding:6px 14px;
+    margin-right: 50px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:13px;
+    }
+    .print-btn:hover { background:#059827; }
+
+    /* Mobile Responsive */
+
+    @media (max-width: 700px) {
+        .modal-grid {
+            grid-template-columns: 1fr;
+        }
+        .photo-section {
+            order: -1; /* Move photo to top on mobile */
+        }
+    }
+</style>
+</head>
+<body>
+
+<h1>Admin Panel - Lakshmir Bhandar</h1>
+<div id="loginBox" class="login-card">
+  <div class="login-header">
+    <h1>🔐 Admin Login</h1>
+  </div>
+
+  <div class="login-body">
+    
+    <input type="text" id="adminUser" placeholder="Enter User ID"
+      onkeydown="if(event.key==='Enter') adminLogin()">
+        
+    
+    <input type="password" id="adminPass" placeholder="Enter Password"
+      onkeydown="if(event.key==='Enter') adminLogin()">
+       
+    <button onclick="adminLogin()">Login</button>
+    <div id="statusMessage"></div>
+  </div>
+</div>
+
+<div class="panel" id="adminPanel" style="display:none;">
+  <h2>Registered Applicants</h2>
+
+  <!-- Top Controls: Search + Import/Export -->
+  <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin:10px 0;">
+    <input type="text" id="searchBox" placeholder="🔍 Search by Name..." 
+      style="padding:10px;width:250px;border-radius:8px;border:none;color:#000;font-weight:600;"
+      oninput="filterByName()">
+
+    <div style="display:flex; gap:10px;">
+      <button onclick="exportToCSV()" 
+        style="padding:10px 15px;border:none;border-radius:6px;background:#0078d7;color:#fff;font-weight:600;cursor:pointer;">
+        ⬆️ Export CSV
+      </button>
+      <input type="file" id="importFile" accept=".csv" style="display:none;" onchange="importFromCSV(event)">
+      <button onclick="document.getElementById('importFile').click()" 
+        style="padding:10px 15px;border:none;border-radius:6px;background:#28a745;color:#fff;font-weight:600;cursor:pointer;">
+        ⬇️ Import CSV
+      </button>
+    </div>
+  </div>
+
+  <div id="loading" style="text-align:center; color:#000;">Loading data...</div>
+
+  <table id="dataTable">
+    <thead></thead>
+    <tbody id="dataRows"></tbody>
+  </table>
+</div>
+
+    <div id="dataModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('dataModal')">×</span>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h3 style="margin:0;">
+            Applicant Details: 
+            <span id="applicantNameHeader" style="color:#0077b6;"></span>
+        </h3>
+        <button onclick="printApplicant()" class="print-btn">🖨️ Print</button>
+        </div>
+
+        <form id="fullEditForm">
+            <input type="hidden" id="editDocId">
+            <div class="modal-grid">
+                <div class="details-section" id="detailsSection">
+                    </div>
+                <div class="photo-section">
+                    <p>Applicant Photo</p>
+                    <img id="applicantPhoto" class="applicant-photo" src="" alt="Applicant Photo">
+                    <p id="noPhotoMsg" style="color: red; margin-top: 10px; display: none;">No Photo Available</p>
+                </div>
+            </div>
+            
+            <div class="modal-footer" id="modalFooter">
+                <p id="editStatusMessage" style="text-align: center; margin-bottom: 10px; color: red;"></p>
+                <button type="button" id="editButton" class="modal-button" onclick="toggleEditMode(true)">Edit Details</button>
+                <button type="submit" id="saveButton" class="modal-button" style="background:#00aaff; display:none;">Save All Updates</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbym1y3-WGU11Q16CcY_ba45vEgfOdLXUmjTqGe9Ns_QeSx4Fq9GYgdlulbXpFB5Jt7Rhw/exec';
+    let sheetData = []; 
+    let currentApplicantData = {}; 
+
+    // --- Date Formatting Functions ---
+    function formatDateDisplay(dateVal) {
+        if (!dateVal || dateVal === "N/A" || dateVal === "") return "N/A";
+        try {
+            const d = new Date(dateVal);
+            if (isNaN(d.getTime())) return dateVal;
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            return `${day}-${month}-${year}`;
+        } catch (e) { return dateVal; }
+    }
+
+    function formatDateForInput(dateVal) {
+        if (!dateVal || dateVal === "N/A") return "";
+        try {
+            const d = new Date(dateVal);
+            if (isNaN(d.getTime())) return "";
+            return d.toISOString().split('T')[0];
+        } catch (e) { return ""; }
+    }
+
+    // --- UI Functions ---
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+        if (id === 'dataModal') toggleEditMode(false);
+    }
+
+    // --- Login & Data Loading ---
+        async function adminLogin() {
+        const user = document.getElementById("adminUser").value;
+        const pass = document.getElementById("adminPass").value;
+        const msg = document.getElementById("statusMessage");
+
+        msg.textContent = "Checking...";
+
+        const res = await fetch(SCRIPT_URL, {
+            method: "POST",
+            body: JSON.stringify({
+                action: "adminLogin",
+                user: user,
+                password: pass
+            })
+        });
+
+        const result = await res.json();
+
+        if (result.result === "success") {
+            document.getElementById("loginBox").style.display = "none";
+            document.getElementById("adminPanel").style.display = "block";
+            loadData();  // আপনার আগে লেখা ফাংশন ডাটা লোডের জন্য
+        } else {
+            msg.textContent = "❌ Wrong User ID or Password";
+        }
+    }
+
+    async function loadData() {
+        const loading = document.getElementById("loading");
+        loading.style.display = "block";
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'fetch' })
+            });
+            sheetData = await response.json();
+            const displayHeaders = ['Name', 'Date_of_Birth', 'Father_Name', 'Aadhaar_Number', 'Village', 'Case_Status', 'Actions'];
+            renderTable(displayHeaders, sheetData);
+        } catch (error) {
+            loading.textContent = "Error: " + error.message;
+        }
+        loading.style.display = "none";
+    }
+
+    function renderTable(headers, data) {
+        const thead = document.querySelector("#dataTable thead");
+        const tbody = document.getElementById("dataRows");
+        thead.innerHTML = ""; tbody.innerHTML = "";
+        
+        const headerRow = document.createElement("tr");
+        headers.forEach(h => {
+            const th = document.createElement("th");
+            th.textContent = h.replace(/_/g, ' '); 
+            headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+
+        data.forEach(row => {
+            const tr = document.createElement("tr");
+            headers.forEach(headerKey => {
+                const td = document.createElement("td");
+                let value = row[headerKey] || 'N/A';
+
+                if (headerKey === 'Actions') {
+                    td.innerHTML = `<button onclick="openDataModal('${row.id}')">View Details</button>`;
+                } else if (headerKey === 'Case_Status') {
+                    td.textContent = value;
+                    td.style.fontWeight = 'bold';
+                    if (value === '4th District Verified') td.style.color = 'green';
+                    else if (value === 'Wait for Entry' || value === '1st Entry') td.style.color = 'orange';
+                    else td.style.color = 'blue';
+                } else if (headerKey === 'Date_of_Birth') {
+                    td.textContent = formatDateDisplay(value);
+                } else {
+                    td.textContent = value;
+                }
+                tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+        });
+    }
+
+    function filterByName() {
+        const q = document.getElementById("searchBox").value.toLowerCase();
+        const displayHeaders = ['Name', 'Date_of_Birth', 'Father_Name', 'Aadhaar_Number', 'Village', 'Case_Status', 'Actions'];
+        const filtered = sheetData.filter(r => (r.Name || "").toLowerCase().includes(q));
+        renderTable(displayHeaders, filtered);
+    }
+
+    const detailFields = [
+  { key: 'Timestamp', label: 'Entry Time', editable: false },
+  { key: 'LB_ID', label: 'LB ID', editable: true },
+
+  { key: 'Name', label: 'Name', editable: true },
+  { key: 'Date_of_Birth', label: 'Date of Birth', editable: false, type: 'date' },
+  { key: 'Age_2026', label: 'Age (as on 01/01/2026)', editable: false },
+
+  { key: 'Father_Name', label: "Father's Name", editable: true },
+  { key: 'Mother_Name', label: "Mother's Name", editable: true },
+
+  { key: 'Marital_Status', label: 'Marital Status', editable: true, type: 'select',
+    options: ['Unmarried', 'Married', 'Widow', 'Divorced'] },
+
+  { key: 'Husband_Name', label: "Husband's Name", editable: true },
+
+  { key: 'Aadhaar_Number', label: 'Aadhaar Number', editable: true },
+  { key: 'Voter_Number', label: 'Voter ID Number', editable: true },
+
+  { key: 'Caste_Category', label: 'Caste Category', editable: true, type: 'select',
+    options: ['General', 'SC', 'ST', 'Others'] },
+
+  { key: 'Caste_Number', label: 'Caste Certificate No.', editable: true },
+
+  { key: 'Ration_Number', label: 'Ration Card No.', editable: true },
+  { key: 'Swasthasathi_Number', label: 'Swasthasathi No.', editable: true },
+
+  { key: 'Village', label: 'Village', editable: true },
+  { key: 'Post_Office', label: 'Post Office', editable: true },
+  { key: 'Gram_Panchayat', label: 'Gram Panchayat', editable: true },
+  { key: 'Police_Station', label: 'Police Station', editable: true },
+  { key: 'District', label: 'District', editable: true },
+  { key: 'Pin_Code', label: 'PIN Code', editable: true },
+
+  { key: 'Bank_Name', label: 'Bank Name', editable: true },
+  { key: 'Bank_Branch', label: 'Bank Branch', editable: true },
+  { key: 'IFSC', label: 'IFSC Code', editable: true },
+  { key: 'Account_Number', label: 'Account Number', editable: true },
+
+  { key: 'Mobile_Number', label: 'Mobile Number', editable: true },
+  { key: 'Email', label: 'Email ID', editable: true },
+
+  { key: 'Case_Status', label: 'Case Status', editable: true, type: 'select',
+    options: ['Wait for Entry', '1st Entry', '2nd Submit', '3rd Block Verified', '4th District Verified'] },
+
+  { key: 'Bank_Validation', label: 'Bank Validation', editable: true, type: 'select',
+    options: ['Waiting', 'Validation Success', 'Validation Error', 'No Such Account', 'Account Frozen'] },
+
+  { key: 'Payment_Agreement', label: 'Payment Agreement Amount', editable: true, type: 'select',
+    options: ['0', '1500', '2000', '2500', '3000', '3500','4000','4500', '5000', '10000'] },
+
+  { key: 'Payment_Status', label: 'Payment Status', editable: true, type: 'select',
+    options: ['No Payment', '1000', '1500', '2000', '2500', '3000', '3500','4000','4500', '5000', 'Payment Complete'] },
+
+  { key: 'Note', label: 'Note / Remarks', editable: true, type: 'textarea' }
+];
+
+    function openDataModal(docId) {
+        const applicant = sheetData.find(a => a.id == docId);
+        if (!applicant) return;
+        currentApplicantData = applicant; 
+        document.getElementById('editDocId').value = docId;
+        document.getElementById('applicantNameHeader').textContent = applicant.Name || 'N/A';
+        renderDetails(applicant, false);
+        
+        const photoImg = document.getElementById('applicantPhoto');
+        const noPhotoMsg = document.getElementById('noPhotoMsg');
+        if (applicant.Photo_Upload && applicant.Photo_Upload.includes('data:image')) {
+            photoImg.src = applicant.Photo_Upload;
+            photoImg.style.display = 'block';
+            noPhotoMsg.style.display = 'none';
+        } else {
+            photoImg.style.display = 'none';
+            noPhotoMsg.style.display = 'block';
+        }
+        openModal('dataModal');
+    }
+
+    function toggleEditMode(isEdit) {
+        renderDetails(currentApplicantData, isEdit);
+        document.getElementById('editButton').style.display = isEdit ? 'none' : 'inline-block';
+        document.getElementById('saveButton').style.display = isEdit ? 'inline-block' : 'none';
+    }
+
+    // --- রেন্ডার ফাংশন (যা ড্রপডাউন তৈরি করবে) ---
+function renderDetails(applicant, isEdit) {
+    const detailsDiv = document.getElementById('detailsSection');
+    detailsDiv.innerHTML = '';
+
+    detailFields.forEach(field => {
+        const key = field.key;
+        let value = applicant[key] || '';
+
+        if (isEdit && field.editable) {
+            let inputElement;
+            if (field.type === 'select') {
+                // ড্রপডাউন লজিক
+                let optionsHtml = field.options.map(opt => 
+                    `<option value="${opt}" ${opt == value ? 'selected' : ''}>${opt}</option>`
+                ).join('');
+                inputElement = `<select name="${key}" class="editable-input">${optionsHtml}</select>`;
+            } else if (field.type === 'textarea') {
+                inputElement = `<textarea name="${key}" class="editable-input">${value}</textarea>`;
+            } else if (field.type === 'date') {
+                let dateVal = "";
+                if (value) {
+                    // Remove time part if exists
+                    if (value.includes('T')) {
+                        dateVal = value.split('T')[0];
+                    } else {
+                        const parts = value.toString().split(/[-/]/);
+                        if (parts.length === 3) {
+                            if (parts[0].length === 4) {
+                                dateVal = `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
+                            } else {
+                                dateVal = `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+                            }
+                        }
+                    }
+                }
+                inputElement = `<input type="date" name="${key}" class="editable-input" value="${dateVal}">`;
+            } else {
+                inputElement = `<input type="${field.type || 'text'}" name="${key}" class="editable-input" value="${value}">`;
+            }
+            detailsDiv.innerHTML += `<div class="form-group"><label><strong>${field.label}:</strong></label>${inputElement}</div>`;
+        } else {
+            // ভিউ মোড
+            let displayValue = (field.type === 'date' || key === 'Date_of_Birth') ? formatDateDisplay(value) : (value || 'N/A');
+            detailsDiv.innerHTML += `<p><strong>${field.label}:</strong> ${displayValue}</p>`;
+        }
+    });
+}
+
+    document.getElementById('fullEditForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const docId = document.getElementById('editDocId').value;
+        const statusMsg = document.getElementById('editStatusMessage');
+        statusMsg.textContent = 'Saving to Google Sheets...';
+        
+        const formData = new FormData(e.target);
+        const updates = {};
+        detailFields.filter(f => f.editable).forEach(f => {
+            updates[f.key] = formData.get(f.key);
+        });
+
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'update', id: docId, updates: updates })
+            });
+            const result = await response.json();
+            if (result.result === 'success') {
+                statusMsg.textContent = '✅ Updated Successfully!';
+                setTimeout(() => { closeModal('dataModal'); loadData(); }, 1000);
+            }
+        } catch (error) {
+            statusMsg.textContent = '❌ Update Failed!';
+        }
+    });
+
+    function exportToCSV() {
+        if (sheetData.length === 0) return;
+        const headers = Object.keys(sheetData[0]);
+        const csvRows = [headers.join(",")];
+        sheetData.forEach(row => {
+            const values = headers.map(h => `"${(row[h] || '').toString().replace(/"/g, '""')}"`);
+            csvRows.push(values.join(","));
+        });
+        const blob = new Blob([csvRows.join("\n")], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url; a.download = "LB_Data.csv"; a.click();
+    }
+
+    function printApplicant() {
+
+  // fields to hide in print
+  const hiddenFields = [
+    'Case Status',
+    'Bank Validation',
+    'Payment Agreement Amount',
+    'Payment Status',
+    'Note / Remarks'
+  ];
+
+  // clone details HTML
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = document.getElementById("detailsSection").innerHTML;
+
+  // remove unwanted fields
+  tempDiv.querySelectorAll('p').forEach(p => {
+    const label = p.querySelector('strong')?.innerText.replace(':','').trim();
+    if (hiddenFields.includes(label)) {
+      p.remove();
+    }
+  });
+
+  const detailsHTML = tempDiv.innerHTML;
+
+  // photo
+  const photoEl = document.getElementById("applicantPhoto");
+  const photoHTML = (photoEl && photoEl.src)
+    ? `<img src="${photoEl.src}" />`
+    : `<div class="no-photo">No Photo</div>`;
+
+  const name = currentApplicantData.Name || '';
+
+  const win = window.open('', '', 'width=1000,height=900');
+  win.document.write(`
+    <html>
+    <head>
+      <title>${name} - Application</title>
+      <style>
+        body {
+          font-family: "Segoe UI", Arial, sans-serif;
+          padding: 30px;
+          color: #000;
+        }
+        .header {
+          text-align: center;
+          border-bottom: 2px solid #000;
+          padding-bottom: 10px;
+          margin-bottom: 20px;
+        }
+        .header h2 {
+          margin: 0;
+          font-size: 22px;
+          letter-spacing: 1px;
+        }
+        .header p {
+          margin: 4px 0 0;
+          font-size: 13px;
+        }
+        .container {
+          display: flex;
+          gap: 30px;
+        }
+        .details {
+          flex: 2;
+        }
+        .details p {
+          font-size: 14px;
+          margin: 6px 0;
+        }
+        .details strong {
+          display: inline-block;
+          width: 230px;
+        }
+        .photo-box {
+          flex: 1;
+          text-align: center;
+        }
+        .photo-box img {
+          width: 160px;
+          height: 200px;
+          object-fit: cover;
+          border: 1px solid #000;
+          border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .no-photo {
+          width: 160px;
+          height: 200px;
+          border: 1px dashed #666;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 12px;
+        }
+        .footer {
+          margin-top: 40px;
+          display: flex;
+          justify-content: space-between;
+          font-size: 13px;
+        }
+        .footer div {
+          border-top: 1px solid #000;
+          width: 200px;
+          text-align: center;
+          padding-top: 5px;
+        }
+        button { display:none; }
+      </style>
+    </head>
+
+    <body>
+      <div class="header">
+        <h2>APPLICATION DETAILS</h2>
+        <p>(Computer Generated Copy)</p>
+      </div>
+
+      <div class="container">
+        <div class="details">
+          ${detailsHTML}
+        </div>
+        <div class="photo-box">
+          ${photoHTML}
+          <p style="margin-top:8px;font-size:13px;">Applicant Photo</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Digi World</div>
+        <div>Applicant Signature</div>
+      </div>
+    </body>
+    </html>
+  `);
+
+  win.document.close();
+  win.focus();
+  win.print();
+}
+
+    document.addEventListener('contextmenu', e => e.preventDefault());
+</script>
+</body>
+</html>
