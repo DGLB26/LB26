@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Admin - Lakshmir Bhandar Data</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🖥️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
     body{
@@ -278,7 +279,7 @@
 </head>
 <body>
 
-<h1>Admin Panel - Lakshmir Bhandar</h1>
+<h1><img src="https://i.postimg.cc/brpfHtJq/lbp.png" alt="Website Logo" height="80"></h1>
 <div id="loginBox" class="login-card">
   <div class="login-header">
     <h1>🔐 Admin Login</h1>
@@ -299,7 +300,7 @@
 </div>
 
 <div class="panel" id="adminPanel" style="display:none;">
-  <h2>Registered Applicants</h2>
+  <h2> 📝 Registered Applicants</h2>
 
   <!-- Top Controls: Search + Import/Export -->
   <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin:10px 0;">
@@ -320,7 +321,7 @@
     </div>
   </div>
 
-  <div id="loading" style="text-align:center; color:#000;">Loading data...</div>
+  <div id="loading" style="text-align:center; color:#3f3f3f;">Loading data...</div>
 
   <table id="dataTable">
     <thead></thead>
@@ -535,7 +536,7 @@
     options: ['Waiting', 'Validation Success', 'Validation Error', 'No Such Account', 'Account Frozen'] },
 
   { key: 'Payment_Agreement', label: 'Payment Agreement Amount', editable: true, type: 'select',
-    options: ['0', '1500', '2000', '2500', '3000', '3500','4000','4500', '5000', '10000'] },
+    options: ['0', '1500', '2000', '2500', '3000', '3500','4000','4500', '5000', '5500','6000','10000'] },
 
   { key: 'Payment_Status', label: 'Payment Status', editable: true, type: 'select',
     options: ['No Payment', '1000', '1500', '2000', '2500', '3000', '3500','4000','4500', '5000', 'Payment Complete'] },
@@ -664,6 +665,8 @@ function renderDetails(applicant, isEdit) {
 
   // fields to hide in print
   const hiddenFields = [
+    'Entry Time',
+    'LB ID',
     'Case Status',
     'Bank Validation',
     'Payment Agreement Amount',
@@ -788,7 +791,7 @@ function renderDetails(applicant, isEdit) {
       </div>
 
       <div class="footer">
-        <div>Digi World</div>
+        <div></div>
         <div>Applicant Signature</div>
       </div>
     </body>
